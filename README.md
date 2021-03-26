@@ -2,13 +2,13 @@
 
 ### Install dependencies
 ```bash
-npm install
+yarn install
 ```
 
 ### Build
 
 ```bash
-npm run build
+yarn build
 ```
 
 ### Run
