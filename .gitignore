@@ -1,0 +1,9 @@
+
+# dist
+dist/
+build/
+
+# dependencies
+node_modules/
+
+scratch/
