@@ -1,7 +1,22 @@
 
-import {dag4, DagTypes} from '@stardust-collective/dag4';
+import {dag4, Dag4Types} from '@stardust-collective/dag4';
 import {DagWalletMonitorUpdate} from '@stardust-collective/dag4-wallet';
 import {Subscription} from 'rxjs';
+import fetch from 'node-fetch';
+// const { LocalStorage } = require('node-localstorage');
+
+dag4.di.useFetchHttpClient(fetch);
+
+//Local Storage is used by dag4.monitor to persist pending txs between sessions.
+//Leave commented out to use the DefaultSessionStorage impl that is memory-bound for state storage
+// dag4.di.useLocalStorageClient(new LocalStorage('./scratch'));
+
+// TESTNET
+dag4.network.config({
+  id: 'ceres',
+  beUrl: 'https://api-be.exchanges.constellationnetwork.io',
+  lbUrl: 'http://lb.exchanges.constellationnetwork.io:9000'
+})
 
 const PASSWORD = 'test123';
 const FAUCET_ADDRESS = 'DAG4So5o9ACx5BFQha9FAMgvzkJAjrbh3zotdDax';
@@ -55,7 +70,7 @@ export class WalletDemo {
 
       const faucetApi = dag4.di.createRestApi(FAUCET_URL);
 
-      const pendingTx = await faucetApi.$get<DagTypes.PendingTx>(networkId + '/' + address, {amount: 1});
+      const pendingTx = await faucetApi.$get<Dag4Types.PendingTx>(networkId + '/' + address, {amount: 1});
 
       console.log(`tapFaucet to ${address} - ${dag4.network.getNetwork().lbUrl}/transaction/${pendingTx.hash}`);
 
@@ -200,3 +215,7 @@ type JSONPrivateKey = {
   id: string;
   version: number;
 }
+
+const wallet = new WalletDemo();
+
+wallet.run();

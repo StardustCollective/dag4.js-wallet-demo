@@ -11,7 +11,12 @@ yarn install
 yarn build
 ```
 
-### Run
+### Run Wallet Demo
 ```bash
-node dist/index.js
+node dist/wallet-demo.js
+```
+
+### Run Monitor TXS 
+```bash
+node dist/monitor-txs.js
 ```
