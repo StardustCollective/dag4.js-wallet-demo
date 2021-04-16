@@ -35,22 +35,26 @@ class MonitorTxs {
     try {
       const snapshot = await dag4.network.blockExplorerApi.getSnapshot(nextHeight);
 
-      //Note this API may return a 404 even if the previous found a new height. In which, case
-      //  we need to retry until the blockExplorer has had time to index the last snapshot and
-      //  provide a result
+      //Note getTransactionsBySnapshot may return a 404 even if the getSnapshot request found a new height.
+      //  give blockExplorer time to index the last snapshot and provide a result
+      await this.wait();
+
       const txs = await dag4.network.blockExplorerApi.getTransactionsBySnapshot(nextHeight);
 
       this.processSnapshot(snapshot, txs);
 
       this.lastSnapshotHeight = nextHeight;
 
-      setTimeout(() => this.pollForLatest(), FIVE_SECONDS);
-
+      this.pollForLatest();
     }
     catch(e) {
       setTimeout(() => this.pollForLatest(), FIVE_SECONDS);
     }
 
+  }
+
+  private async wait (time = 5): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, time * 1000));
   }
 
   private processSnapshot (snapshot: Dag4Types.Snapshot, txs: Dag4Types.Transaction[]) {

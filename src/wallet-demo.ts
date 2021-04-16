@@ -169,22 +169,11 @@ export class WalletDemo {
 
       await this.wait();
     }
-
-
   }
 
 
-  private async wait (time = 5): Promise<boolean> {
-
-    let waitPromiseResolve: (val: boolean) => void;
-
-    const p = new Promise<boolean>(resolve => waitPromiseResolve = resolve);
-
-    setTimeout(() => {
-      waitPromiseResolve(true);
-    }, time * 1000);
-
-    return p;
+  private async wait (time = 5): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, time * 1000));
   }
 
   private async pollPendingTxs (update: DagWalletMonitorUpdate) {
