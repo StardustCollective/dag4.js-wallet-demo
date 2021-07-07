@@ -22,6 +22,7 @@ export class Multisig {
         const key2 = dag4.keyStore.generatePrivateKey();
         const key3 = dag4.keyStore.generatePrivateKey();
 
+        //Derive public key and strip '04' prefix
         const pubKey1 = dag4.keyStore.getPublicKeyFromPrivate(key1).substring(2);
         const pubKey2 = dag4.keyStore.getPublicKeyFromPrivate(key2).substring(2);
         const pubKey3 = dag4.keyStore.getPublicKeyFromPrivate(key3).substring(2);
