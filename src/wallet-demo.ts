@@ -18,7 +18,6 @@ dag4.network.config({
   lbUrl: 'http://lb.exchanges.constellationnetwork.io:9000'
 })
 
-const PASSWORD = 'test123';
 const FAUCET_ADDRESS = 'DAG4So5o9ACx5BFQha9FAMgvzkJAjrbh3zotdDax';
 const FAUCET_URL = 'https://us-central1-dag-faucet.cloudfunctions.net/main/api/v1/faucet/'
 
@@ -32,20 +31,6 @@ export class WalletDemo {
 
   constructor () {
     this.subscription = dag4.monitor.observeMemPoolChange().subscribe((U) => this.pollPendingTxs(U));
-  }
-
-  /*
-      The following is not used in the demo.
-      It is an example of how to generate an encrypted private key, decrypt it and get the DAG address.
-      NOTE: Encrypt/Decrypt are both cpu intensive operations.
-   */
-  async createEncryptedWalletsAB () {
-    //Create Wallet A using JsonPrivateKey. Encrypted JsonPrivateKey requires password to later decrypt.
-    const jsonPrivateKey: JSONPrivateKey = await dag4.keyStore.generateEncryptedPrivateKey(PASSWORD);
-
-    //decrypt JSON to extract the private key
-    this.wallet1PrivateKey = await dag4.keyStore.decryptPrivateKey(jsonPrivateKey, PASSWORD);
-    this.wallet1DAGAddress = await dag4.keyStore.getDagAddressFromPrivateKey(this.wallet1PrivateKey);
   }
 
   async createWallets1and2 () {
@@ -190,20 +175,6 @@ export class WalletDemo {
 
 }
 
-type JSONPrivateKey = {
-  crypto: {
-    cipher: string;
-    cipherparams: {
-      iv: string;
-    };
-    ciphertext: string;
-    kdf: string;
-    kdfparams: any;
-    mac: string;
-  };
-  id: string;
-  version: number;
-}
 
 const wallet = new WalletDemo();
 
